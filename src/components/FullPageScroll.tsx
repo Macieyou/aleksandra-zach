@@ -16,6 +16,22 @@ const ANIMATION_EASE: [number, number, number, number] = [0.25, 0.1, 0.25, 1];
 const COOLDOWN_MS = 800;
 const TOUCH_THRESHOLD = 50;
 
+function useViewportHeight() {
+  useEffect(() => {
+    const update = () => {
+      const vh = (window.visualViewport?.height ?? window.innerHeight) * 0.01;
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
+    };
+    update();
+    window.addEventListener("resize", update);
+    window.visualViewport?.addEventListener("resize", update);
+    return () => {
+      window.removeEventListener("resize", update);
+      window.visualViewport?.removeEventListener("resize", update);
+    };
+  }, []);
+}
+
 interface FullPageContextValue {
   currentSection: number;
   sectionCount: number;
@@ -45,6 +61,8 @@ export default function FullPageScroll({
   children,
   sectionCount,
 }: FullPageScrollProps) {
+  useViewportHeight();
+
   const [currentSection, setCurrentSection] = useState(0);
   const isAnimating = useRef(false);
   const touchStartY = useRef(0);

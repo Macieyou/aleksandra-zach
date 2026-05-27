@@ -81,12 +81,12 @@ export default function HeroSection() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 3.0, duration: 1.5, ease: "easeOut" }}
+        transition={{ delay: 4.5, duration: 1.5, ease: "easeOut" }}
       >
         <FloatingParticles count={20} darkMode />
       </motion.div>
 
-      <div className="relative z-10 text-center px-6">
+      <div className="relative z-10 text-center px-6 -mt-[10vh]">
         {/* Top decorative line */}
         <motion.div
           className="mx-auto mb-8 h-px bg-gradient-to-r from-transparent via-[#D4AF37]/50 to-transparent"
