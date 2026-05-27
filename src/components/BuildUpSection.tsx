@@ -45,7 +45,7 @@ export default function BuildUpSection() {
   const sparkles = useSparkles(18);
 
   return (
-    <section className="relative h-screen flex flex-col items-center justify-center overflow-hidden">
+    <section className="relative h-screen-safe flex flex-col items-center justify-center overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-[#0B1628] via-[#132744] to-[#0D1B30]" />
 
       <motion.div

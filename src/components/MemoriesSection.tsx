@@ -75,7 +75,7 @@ export default function MemoriesSection() {
   );
 
   return (
-    <section className="relative h-screen flex flex-col items-center justify-center gap-[2.5vh] py-[3vh] overflow-hidden">
+    <section className="relative h-screen-safe flex flex-col items-center justify-center gap-[2.5vh] py-[3vh] overflow-hidden">
       <div
         className="absolute inset-0"
         style={{

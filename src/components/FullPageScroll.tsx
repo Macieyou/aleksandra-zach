@@ -60,7 +60,8 @@ export default function FullPageScroll({
       isAnimating.current = true;
       setCurrentSection(clamped);
 
-      const target = -clamped * window.innerHeight;
+      const sectionHeight = containerRef.current?.clientHeight || window.innerHeight;
+      const target = -clamped * sectionHeight;
       animate(yOffset, target, {
         duration: ANIMATION_DURATION,
         ease: ANIMATION_EASE,
@@ -104,7 +105,7 @@ export default function FullPageScroll({
       const delta = touchStartY.current - e.changedTouches[0].clientY;
       if (Math.abs(delta) < TOUCH_THRESHOLD) return;
       if (delta > 0) next();
-      else prev();
+      else if (currentSection > 0) prev();
     };
 
     const onKeyDown = (e: KeyboardEvent) => {
@@ -133,7 +134,8 @@ export default function FullPageScroll({
 
   useEffect(() => {
     const onResize = () => {
-      const target = -currentSection * window.innerHeight;
+      const sectionHeight = containerRef.current?.clientHeight || window.innerHeight;
+      const target = -currentSection * sectionHeight;
       yOffset.set(target);
     };
     window.addEventListener("resize", onResize);
@@ -150,7 +152,7 @@ export default function FullPageScroll({
 
   return (
     <FullPageContext.Provider value={contextValue}>
-      <div ref={containerRef} className="h-screen overflow-hidden relative">
+      <div ref={containerRef} className="h-screen-safe overflow-hidden relative">
         <motion.div style={{ y: yOffset }}>
           {children}
         </motion.div>

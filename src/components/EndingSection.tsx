@@ -5,7 +5,7 @@ import FloatingParticles from "./FloatingParticles";
 
 export default function EndingSection() {
   return (
-    <section className="relative h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative h-screen-safe flex items-center justify-center overflow-hidden">
       {/* Warm gradient background */}
       <div
         className="absolute inset-0"

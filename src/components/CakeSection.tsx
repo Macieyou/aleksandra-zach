@@ -80,7 +80,7 @@ export default function CakeSection() {
   return (
     <section
       ref={ref}
-      className="relative h-screen flex items-center justify-center overflow-hidden"
+      className="relative h-screen-safe flex items-center justify-center overflow-hidden"
     >
       <div
         className="absolute inset-0"
