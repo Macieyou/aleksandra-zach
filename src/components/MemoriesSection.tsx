@@ -10,6 +10,7 @@ const SECTION_INDEX = 3;
 export default function MemoriesSection() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
   const [progress, setProgress] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
   const { currentSection } = useFullPage();
@@ -21,6 +22,7 @@ export default function MemoriesSection() {
     if (video.paused) {
       video.play();
       setIsPlaying(true);
+      setHasStarted(true);
     } else {
       video.pause();
       setIsPlaying(false);
@@ -39,6 +41,7 @@ export default function MemoriesSection() {
     };
     const onEnded = () => {
       setIsPlaying(false);
+      setHasStarted(false);
       setProgress(0);
     };
 
@@ -114,7 +117,7 @@ export default function MemoriesSection() {
               <source src="/images/urodziny-60-ordinary.mp4#t=0.1" type="video/mp4" />
             </video>
 
-            {!isPlaying && progress === 0 && (
+            {!isPlaying && !hasStarted && (
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                 <div className="w-14 h-14 rounded-full bg-black/40 flex items-center justify-center border border-white/30">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="white" className="ml-0.5">
@@ -124,7 +127,7 @@ export default function MemoriesSection() {
               </div>
             )}
 
-            {!isPlaying && progress > 0 && (
+            {!isPlaying && hasStarted && (
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                 <div className="w-14 h-14 rounded-full bg-black/40 flex items-center justify-center border border-white/30">
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="white">

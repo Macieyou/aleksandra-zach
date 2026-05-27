@@ -118,6 +118,15 @@ export default function FullPageScroll({
       touchStartY.current = e.touches[0].clientY;
     };
 
+    const onTouchMove = (e: TouchEvent) => {
+      const delta = touchStartY.current - e.touches[0].clientY;
+      const pullingDown = delta < -10;
+      if (pullingDown && currentSection === 0) {
+        return;
+      }
+      e.preventDefault();
+    };
+
     const onTouchEnd = (e: TouchEvent) => {
       if (isAnimating.current) return;
       const delta = touchStartY.current - e.changedTouches[0].clientY;
@@ -139,12 +148,14 @@ export default function FullPageScroll({
 
     el.addEventListener("wheel", onWheel, { passive: false });
     el.addEventListener("touchstart", onTouchStart, { passive: true });
+    el.addEventListener("touchmove", onTouchMove, { passive: false });
     el.addEventListener("touchend", onTouchEnd, { passive: true });
     window.addEventListener("keydown", onKeyDown);
 
     return () => {
       el.removeEventListener("wheel", onWheel);
       el.removeEventListener("touchstart", onTouchStart);
+      el.removeEventListener("touchmove", onTouchMove);
       el.removeEventListener("touchend", onTouchEnd);
       window.removeEventListener("keydown", onKeyDown);
     };
