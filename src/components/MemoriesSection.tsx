@@ -36,6 +36,8 @@ export default function MemoriesSection() {
       if (video.duration) setProgress(video.currentTime / video.duration);
     };
     const onEnded = () => {
+      video.pause();
+      video.currentTime = 0;
       setIsPlaying(false);
       setHasStarted(false);
       setProgress(0);
