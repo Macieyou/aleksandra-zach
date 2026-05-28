@@ -5,7 +5,7 @@ import FloatingParticles from "./FloatingParticles";
 
 export default function EndingSection() {
   return (
-    <section className="relative h-screen-safe flex items-center justify-center overflow-hidden">
+    <section className="relative h-full flex items-center justify-center overflow-hidden">
       {/* Warm gradient background */}
       <div
         className="absolute inset-0"
@@ -50,7 +50,7 @@ export default function EndingSection() {
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 1.5, duration: 1.2 }}
+          transition={{ delay: 0.8, duration: 1.2 }}
           className="text-xl md:text-2xl font-serif text-graphite/60 italic"
         >
           — Paulinka, Krzyś i Bartuś

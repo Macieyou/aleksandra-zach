@@ -2,13 +2,16 @@
 
 import { motion, animate, useMotionValue } from "framer-motion";
 import {
+  Children,
   createContext,
   useCallback,
   useContext,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   type ReactNode,
+  type RefObject,
 } from "react";
 
 const ANIMATION_DURATION = 0.7;
@@ -16,11 +19,19 @@ const ANIMATION_EASE: [number, number, number, number] = [0.25, 0.1, 0.25, 1];
 const COOLDOWN_MS = 800;
 const TOUCH_THRESHOLD = 50;
 
-function useViewportHeight() {
-  useEffect(() => {
+function useViewportMetrics(containerRef: RefObject<HTMLDivElement | null>) {
+  const [sectionHeight, setSectionHeight] = useState<number | null>(null);
+
+  useLayoutEffect(() => {
     const update = () => {
       const vh = (window.visualViewport?.height ?? window.innerHeight) * 0.01;
       document.documentElement.style.setProperty("--vh", `${vh}px`);
+
+      const h = containerRef.current?.clientHeight;
+      if (h && h > 0) {
+        setSectionHeight(h);
+        document.documentElement.style.setProperty("--section-height", `${h}px`);
+      }
     };
     update();
     window.addEventListener("resize", update);
@@ -29,7 +40,9 @@ function useViewportHeight() {
       window.removeEventListener("resize", update);
       window.visualViewport?.removeEventListener("resize", update);
     };
-  }, []);
+  }, [containerRef]);
+
+  return sectionHeight;
 }
 
 interface FullPageContextValue {
@@ -61,13 +74,17 @@ export default function FullPageScroll({
   children,
   sectionCount,
 }: FullPageScrollProps) {
-  useViewportHeight();
-
   const [currentSection, setCurrentSection] = useState(0);
   const isAnimating = useRef(false);
   const touchStartY = useRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const yOffset = useMotionValue(0);
+  const sectionHeight = useViewportMetrics(containerRef);
+
+  const getSectionHeight = useCallback(
+    () => containerRef.current?.clientHeight ?? window.innerHeight,
+    []
+  );
 
   const goTo = useCallback(
     (index: number) => {
@@ -78,19 +95,20 @@ export default function FullPageScroll({
       isAnimating.current = true;
       setCurrentSection(clamped);
 
-      const sectionHeight = containerRef.current?.clientHeight || window.innerHeight;
-      const target = -clamped * sectionHeight;
+      const height = getSectionHeight();
+      const target = Math.round(-clamped * height);
       animate(yOffset, target, {
         duration: ANIMATION_DURATION,
         ease: ANIMATION_EASE,
         onComplete: () => {
+          yOffset.set(target);
           setTimeout(() => {
             isAnimating.current = false;
           }, COOLDOWN_MS - ANIMATION_DURATION * 1000);
         },
       });
     },
-    [currentSection, sectionCount, yOffset]
+    [currentSection, sectionCount, getSectionHeight, yOffset]
   );
 
   const next = useCallback(
@@ -163,13 +181,12 @@ export default function FullPageScroll({
 
   useEffect(() => {
     const onResize = () => {
-      const sectionHeight = containerRef.current?.clientHeight || window.innerHeight;
-      const target = -currentSection * sectionHeight;
-      yOffset.set(target);
+      const height = getSectionHeight();
+      yOffset.set(Math.round(-currentSection * height));
     };
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
-  }, [currentSection, yOffset]);
+  }, [currentSection, getSectionHeight, yOffset]);
 
   const contextValue: FullPageContextValue = {
     currentSection,
@@ -182,8 +199,16 @@ export default function FullPageScroll({
   return (
     <FullPageContext.Provider value={contextValue}>
       <div ref={containerRef} className="h-screen-safe overflow-hidden relative">
-        <motion.div style={{ y: yOffset }}>
-          {children}
+        <motion.div style={{ y: yOffset }} className="will-change-transform">
+          {Children.map(children, (child, index) => (
+            <div
+              key={index}
+              className={`shrink-0 overflow-hidden ${sectionHeight == null ? "h-screen-safe" : ""}`}
+              style={sectionHeight != null ? { height: sectionHeight } : undefined}
+            >
+              {child}
+            </div>
+          ))}
         </motion.div>
 
       </div>

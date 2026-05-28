@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { useRef, useState, useCallback, useEffect } from "react";
 import { useFullPage } from "./FullPageScroll";
 import FloatingParticles from "./FloatingParticles";
@@ -33,9 +32,6 @@ export default function MemoriesSection() {
     const video = videoRef.current;
     if (!video) return;
 
-    const onLoadedMetadata = () => {
-      if (video.currentTime === 0) video.currentTime = 0.1;
-    };
     const onTimeUpdate = () => {
       if (video.duration) setProgress(video.currentTime / video.duration);
     };
@@ -45,11 +41,9 @@ export default function MemoriesSection() {
       setProgress(0);
     };
 
-    video.addEventListener("loadedmetadata", onLoadedMetadata);
     video.addEventListener("timeupdate", onTimeUpdate);
     video.addEventListener("ended", onEnded);
     return () => {
-      video.removeEventListener("loadedmetadata", onLoadedMetadata);
       video.removeEventListener("timeupdate", onTimeUpdate);
       video.removeEventListener("ended", onEnded);
     };
@@ -78,7 +72,7 @@ export default function MemoriesSection() {
   );
 
   return (
-    <section className="relative h-screen-safe flex flex-col items-center justify-center gap-[2.5vh] py-[3vh] overflow-hidden">
+    <section className="relative h-full flex flex-col items-center justify-center gap-[2.5vh] py-[3vh] overflow-hidden">
       <div
         className="absolute inset-0"
         style={{
@@ -112,9 +106,10 @@ export default function MemoriesSection() {
               className="w-full h-full object-cover cursor-pointer"
               playsInline
               preload="metadata"
+              poster="/images/urodziny-60-ordinary-poster.png"
               onClick={togglePlay}
             >
-              <source src="/images/urodziny-60-ordinary.mp4#t=0.1" type="video/mp4" />
+              <source src="/images/urodziny-60-ordinary.mp4" type="video/mp4" />
             </video>
 
             {!isPlaying && !hasStarted && (

@@ -248,7 +248,7 @@ export default function RevealSection() {
   return (
     <section
       ref={ref}
-      className="relative h-screen-safe flex items-center justify-center overflow-hidden"
+      className="relative h-full flex items-center justify-center overflow-hidden"
     >
       {/* Warm lemon-tinted gradient background */}
       <div

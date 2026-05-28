@@ -42,7 +42,7 @@ const climax = {
 
 export default function WishesSection() {
   return (
-    <section className="relative h-screen-safe flex items-center justify-center overflow-hidden">
+    <section className="relative h-full flex items-center justify-center overflow-hidden">
       <div
         className="absolute inset-0"
         style={{

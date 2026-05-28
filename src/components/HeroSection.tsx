@@ -53,7 +53,7 @@ export default function HeroSection() {
 
   return (
     <section
-      className="relative h-screen-safe flex items-center justify-center overflow-hidden"
+      className="relative h-full flex items-center justify-center overflow-hidden"
     >
       {/* Deep navy gradient background */}
       <div
