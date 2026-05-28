@@ -19,20 +19,20 @@ const ANIMATION_EASE: [number, number, number, number] = [0.25, 0.1, 0.25, 1];
 const COOLDOWN_MS = 800;
 const TOUCH_THRESHOLD = 50;
 
-function useViewportMetrics(containerRef: RefObject<HTMLDivElement | null>) {
-  const [sectionHeight, setSectionHeight] = useState<number | null>(null);
-
+function useViewportHeight(
+  containerRef: RefObject<HTMLDivElement | null>,
+  currentSection: number,
+  yOffset: ReturnType<typeof useMotionValue<number>>
+) {
   useLayoutEffect(() => {
     const update = () => {
       const vh = (window.visualViewport?.height ?? window.innerHeight) * 0.01;
       document.documentElement.style.setProperty("--vh", `${vh}px`);
 
-      const h = containerRef.current?.clientHeight;
-      if (h && h > 0) {
-        setSectionHeight(h);
-        document.documentElement.style.setProperty("--section-height", `${h}px`);
-      }
+      const height = containerRef.current?.clientHeight ?? window.innerHeight;
+      yOffset.set(Math.round(-currentSection * height));
     };
+
     update();
     window.addEventListener("resize", update);
     window.visualViewport?.addEventListener("resize", update);
@@ -40,9 +40,7 @@ function useViewportMetrics(containerRef: RefObject<HTMLDivElement | null>) {
       window.removeEventListener("resize", update);
       window.visualViewport?.removeEventListener("resize", update);
     };
-  }, [containerRef]);
-
-  return sectionHeight;
+  }, [containerRef, currentSection, yOffset]);
 }
 
 interface FullPageContextValue {
@@ -79,7 +77,8 @@ export default function FullPageScroll({
   const touchStartY = useRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const yOffset = useMotionValue(0);
-  const sectionHeight = useViewportMetrics(containerRef);
+
+  useViewportHeight(containerRef, currentSection, yOffset);
 
   const getSectionHeight = useCallback(
     () => containerRef.current?.clientHeight ?? window.innerHeight,
@@ -177,16 +176,7 @@ export default function FullPageScroll({
       el.removeEventListener("touchend", onTouchEnd);
       window.removeEventListener("keydown", onKeyDown);
     };
-  }, [next, prev]);
-
-  useEffect(() => {
-    const onResize = () => {
-      const height = getSectionHeight();
-      yOffset.set(Math.round(-currentSection * height));
-    };
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, [currentSection, getSectionHeight, yOffset]);
+  }, [next, prev, currentSection]);
 
   const contextValue: FullPageContextValue = {
     currentSection,
@@ -201,16 +191,11 @@ export default function FullPageScroll({
       <div ref={containerRef} className="h-screen-safe overflow-hidden relative">
         <motion.div style={{ y: yOffset }} className="will-change-transform">
           {Children.map(children, (child, index) => (
-            <div
-              key={index}
-              className={`shrink-0 overflow-hidden ${sectionHeight == null ? "h-screen-safe" : ""}`}
-              style={sectionHeight != null ? { height: sectionHeight } : undefined}
-            >
+            <div key={index} className="h-screen-safe shrink-0 overflow-hidden">
               {child}
             </div>
           ))}
         </motion.div>
-
       </div>
     </FullPageContext.Provider>
   );

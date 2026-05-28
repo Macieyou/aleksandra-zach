@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kod QR — Dla Ciebie, Oleńko</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f0e6db;
+        font-family: "Inter", system-ui, sans-serif;
+        color: #2a2a2a;
+        padding: 24px;
+      }
+
+      .sheet {
+        width: 88mm;
+        background: #fbf5ee;
+        background: linear-gradient(180deg, #fdfbf7 0%, #fbf5ee 45%, #f5ede3 100%);
+        border-radius: 3mm;
+        box-shadow: 0 8px 40px rgba(42, 42, 42, 0.12);
+        padding: 12mm 9mm 12mm;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        position: relative;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .sheet::before,
+      .sheet::after {
+        content: "";
+        position: absolute;
+        width: 8mm;
+        height: 8mm;
+        border-color: #c9a96e;
+        border-style: solid;
+        pointer-events: none;
+      }
+
+      .sheet::before {
+        top: 6mm;
+        left: 6mm;
+        border-width: 1px 0 0 1px;
+      }
+
+      .sheet::after {
+        bottom: 6mm;
+        right: 6mm;
+        border-width: 0 1px 1px 0;
+      }
+
+      .eyebrow {
+        font-size: 7pt;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: #4a4a4a;
+        font-weight: 400;
+        margin-bottom: 2.5mm;
+      }
+
+      h1 {
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: 16pt;
+        font-weight: 600;
+        line-height: 1.25;
+        color: #2a2a2a;
+        margin-bottom: 2mm;
+      }
+
+      .heart {
+        font-size: 14pt;
+        line-height: 1;
+        margin-bottom: 5mm;
+      }
+
+      .hint {
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: 9pt;
+        font-weight: 500;
+        font-style: normal;
+        color: #3a3a3a;
+        max-width: 68mm;
+        line-height: 1.5;
+        margin-top: 6mm;
+      }
+
+      .qr-frame {
+        padding: 2.5mm;
+        background: #b8894a;
+        border: 0.4mm solid #96703a;
+        border-radius: 2mm;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .qr-inner {
+        background: #fff;
+        padding: 0.5mm;
+        border-radius: 1.5mm;
+      }
+
+      .qr-inner img {
+        display: block;
+        width: 40mm;
+        height: 40mm;
+        image-rendering: pixelated;
+        image-rendering: crisp-edges;
+      }
+
+      @media print {
+        * {
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+        }
+
+        body {
+          background: white !important;
+          padding: 0;
+          display: block;
+          min-height: auto;
+        }
+
+        .print-wrap {
+          page-break-inside: avoid;
+          break-inside: avoid;
+        }
+
+        .sheet {
+          background: #fbf5ee !important;
+          box-shadow: none;
+          width: 88mm;
+          margin: 0 auto;
+          min-height: 0 !important;
+          border-radius: 0;
+          page-break-inside: avoid;
+          break-inside: avoid;
+        }
+
+        .qr-frame {
+          background: #b8894a !important;
+          border: 0.4mm solid #96703a !important;
+        }
+
+        .sheet::before,
+        .sheet::after {
+          border-color: #c9a96e !important;
+        }
+      }
+
+      @page {
+        size: A4 portrait;
+        margin: 18mm;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="print-wrap">
+      <article class="sheet">
+        <p class="eyebrow">Specjalna niespodzianka</p>
+        <h1>Zeskanuj kod</h1>
+        <p class="heart" aria-hidden="true">❤️</p>
+
+        <div class="qr-frame">
+          <div class="qr-inner">
+            <img
+              src="./qr-code.png"
+              width="600"
+              height="600"
+              alt="Kod QR prowadzący do strony urodzinowej"
+            />
+          </div>
+        </div>
+
+        <p class="hint">Coś wyjątkowego czeka po drugiej stronie</p>
+      </article>
+    </div>
+  </body>
+</html>

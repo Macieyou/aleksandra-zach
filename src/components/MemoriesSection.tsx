@@ -94,15 +94,24 @@ export default function MemoriesSection() {
 
       <div className="relative z-10 w-full max-w-sm md:max-w-2xl lg:max-w-4xl mx-auto px-6 flex-1 min-h-0">
         <div
-          className="relative h-full rounded-2xl overflow-hidden shadow-2xl shadow-graphite/15"
+          className="relative h-full rounded-lg p-[0.8vh] shadow-2xl shadow-graphite/20"
           style={{
             background:
               "linear-gradient(145deg, #B8894A 0%, #96703A 15%, #C49A5C 30%, #A07840 50%, #C4A265 70%, #96703A 85%, #B8894A 100%)",
-            padding: "6px",
           }}
         >
-          <div className="h-full rounded-[10px] p-[10px] bg-white">
-            <div className="relative h-full rounded-[6px] overflow-hidden bg-black">
+          <div
+            className="h-full rounded-[4px] p-[2px]"
+            style={{
+              background:
+                "linear-gradient(145deg, #8B6332, #6B4C28, #8B6332)",
+              boxShadow:
+                "inset 0 1px 3px rgba(0,0,0,0.4), inset 0 -1px 2px rgba(255,255,255,0.1)",
+            }}
+          >
+            <div className="h-full rounded-[2px] p-[2px] bg-gradient-to-br from-[#D4AF37] via-[#C9A96E] to-[#D4AF37]">
+              <div className="h-full rounded-sm p-[10px] bg-white">
+                <div className="relative h-full rounded-[2px] overflow-hidden bg-black">
             <video
               ref={videoRef}
               className="w-full h-full object-cover cursor-pointer"
@@ -180,8 +189,17 @@ export default function MemoriesSection() {
                 </div>
               </div>
             </div>
+              </div>
+              </div>
             </div>
           </div>
+
+          <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-[#D4AF37]/40 rounded-tl-sm pointer-events-none" />
+          <div className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-[#D4AF37]/40 rounded-tr-sm pointer-events-none" />
+          <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-[#D4AF37]/40 rounded-bl-sm pointer-events-none" />
+          <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-[#D4AF37]/40 rounded-br-sm pointer-events-none" />
+
+          <div className="absolute -inset-6 rounded-3xl bg-gold/8 blur-3xl -z-10 pointer-events-none" />
         </div>
       </div>
     </section>
